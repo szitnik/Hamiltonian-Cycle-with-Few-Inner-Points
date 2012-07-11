@@ -1,11 +1,13 @@
-package si.zitnik.dr.mmr.ui
+package si.zitnik.dr.mmr.ui.views
 
 import javafx.application.Application
 import javafx.stage.Stage
 import javafx.scene.control.Button
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.layout.StackPane
-import javafx.scene.Scene
+import javafx.scene.{Parent, Scene}
+import javafx.fxml
+import fxml.FXMLLoader
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,19 +23,9 @@ class MainWindow extends Application {
 
   override
   def start(primaryStage: Stage) {
+    val root: Parent = FXMLLoader.load(this.getClass().getClassLoader().getResource("fxml_mainWindow.fxml"))
     primaryStage.setTitle(title)
-
-    val btn = new Button("Say Hello World!")
-    btn.setOnAction(new EventHandler[ActionEvent] {
-      override
-      def handle(event: ActionEvent) {
-        println("Hello World!")
-      }
-    })
-
-    val root = new StackPane()
-    root.getChildren().add(btn)
-    primaryStage.setScene(new Scene(root, 300, 250))
+    primaryStage.setScene(new Scene(root))
     primaryStage.show()
   }
 }
