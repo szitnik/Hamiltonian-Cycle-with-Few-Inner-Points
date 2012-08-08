@@ -1,5 +1,6 @@
 package si.zitnik.dr.mmr.algorithms
 
+import abst.Algorithm
 import collection.mutable.ArrayBuffer
 import si.zitnik.dr.mmr.domain.Point
 import si.zitnik.dr.mmr.convexhull.IncrementalConvexHull
@@ -13,16 +14,13 @@ import si.zitnik.dr.mmr.util.MMRConversions._
  * To change this template use File | Settings | File Templates.
  */
 
-class Algorithm1(private val points: ArrayBuffer[Point]) {
+class Algorithm1(points: ArrayBuffer[Point]) extends Algorithm(points) {
 
   private var F1: Array[Array[Array[(Double, Array[Point])]]] = null
   private val n = points.size
   private var k = 0
 
-  /**
-   *
-   * @return (points, distance)
-   */
+  override
   def compute(): (Double, Array[Point]) = {
     val OutP = IncrementalConvexHull.calculateConvexHull(points)
     val InnP = (points -- OutP).sorted
