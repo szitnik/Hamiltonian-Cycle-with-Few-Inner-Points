@@ -20,7 +20,7 @@ class Algorithm2Test {
   def test0() {
     var input = new ArrayBuffer[Point]()
     val rand = new Random()
-    (1 to 100).foreach(_ => {input += ((rand.nextDouble()*1000, rand.nextDouble()*1000))})
+    (1 to 20).foreach(_ => {input += ((rand.nextDouble()*1000, rand.nextDouble()*1000))})
 
 
     val shortestTour = new Algorithm2(input).compute()
