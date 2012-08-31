@@ -13,6 +13,7 @@ import si.zitnik.dr.mmr.domain.Point
  * To change this template use File | Settings | File Templates.
  */
 class GraphPanel(val points: Array[Point]) extends JPanel {
+  this.setBackground(Color.WHITE)
   val padding = 45
   val pointSize = 7
 

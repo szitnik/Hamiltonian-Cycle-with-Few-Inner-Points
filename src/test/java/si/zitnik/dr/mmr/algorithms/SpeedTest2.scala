@@ -15,7 +15,7 @@ import si.zitnik.dr.mmr.ui.GraphFrame
  */
 class SpeedTest2 {
 
-  //@Test
+  @Test
   def test1() {
 
     val runtimes1 = Array.ofDim[Double](11)

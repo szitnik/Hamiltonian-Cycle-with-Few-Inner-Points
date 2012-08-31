@@ -1,7 +1,7 @@
 package si.zitnik.dr.mmr.ui
 
 import javax.swing.{WindowConstants, JFrame}
-import java.awt.BorderLayout
+import java.awt.{Color, BorderLayout}
 import si.zitnik.dr.mmr.util.RandomGraph
 import si.zitnik.dr.mmr.domain.Point
 import collection.mutable.ArrayBuffer
@@ -24,6 +24,7 @@ class GraphFrame extends JFrame {
 
     val content = this.getContentPane()
     content.setLayout(new BorderLayout())
+    content.setBackground(Color.WHITE)
 
     val panel = new GraphPanel(hamiltonianCycle)
     content.add(panel, BorderLayout.CENTER)
