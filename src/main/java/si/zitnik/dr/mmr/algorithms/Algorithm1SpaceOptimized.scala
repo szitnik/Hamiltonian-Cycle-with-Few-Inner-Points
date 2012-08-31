@@ -26,12 +26,25 @@ class Algorithm1SpaceOptimized(points: ArrayBuffer[Point]) extends Algorithm(poi
     val InnP = (points -- OutP).sorted
     k = InnP.size
 
-    //add blinds
-    OutP.insert(0, ((0., 0.)))
-    InnP.insert(0, ((Double.PositiveInfinity, Double.PositiveInfinity)))
+    //add blind to OutP
+    OutP.insert(0,((Double.PositiveInfinity,Double.PositiveInfinity)))
 
+    var curResult = (Double.PositiveInfinity, Array[Point]())
+    for (innPPermutation <- InnP.permutations) {
+      //add blind to innPPermutation
+      innPPermutation.insert(0, ((Double.PositiveInfinity, Double.PositiveInfinity)))
+      val tempResult = computeForPermutation(OutP, innPPermutation)
 
-    val i = 2 + 1 //zero index will not be used //SPACE OPTIMIZATION
+      if (tempResult._1 < curResult._1) {
+        curResult = tempResult
+      }
+    }
+
+    curResult
+  }
+
+  def computeForPermutation(OutP: ArrayBuffer[Point], InnP: ArrayBuffer[Point]) = {
+    val i = 2
     val j = k + 1
     val m = 2 // Inn = 0, Out = 1
     F1 = Array.ofDim(i, j, m)
@@ -45,35 +58,42 @@ class Algorithm1SpaceOptimized(points: ArrayBuffer[Point]) extends Algorithm(poi
     for (iCtr <- 1 to n - k) { //SPACE OPTIMIZATIONS
       for (jCtr <- 0 to k) {
         if (jCtr > 0) {
-          val dist1 = F1(i-2)(jCtr - 1)(1)._1 + OutP(iCtr).distanceTo(InnP(jCtr))
-          val dist2 = F1(i-2)(jCtr - 1)(0)._1 + InnP(jCtr - 1).distanceTo(InnP(jCtr))
-          F1(i-2)(jCtr)(0) = if (dist1 < dist2) {
-            (dist1, F1(i-2)(jCtr - 1)(1)._2 ++ Array(InnP(jCtr)))
+          val dist1 = F1(i-1)(jCtr - 1)(1)._1 + OutP(iCtr).distanceTo(InnP(jCtr))
+          val dist2 = F1(i-1)(jCtr - 1)(0)._1 + InnP(jCtr - 1).distanceTo(InnP(jCtr))
+          F1(i-1)(jCtr)(0) = if (dist1 < dist2) {
+            (dist1, F1(i-1)(jCtr - 1)(1)._2 ++ Array(InnP(jCtr)))
           } else {
-            (dist2, F1(i-2)(jCtr - 1)(0)._2 ++ Array(InnP(jCtr)))
+            (dist2, F1(i-1)(jCtr - 1)(0)._2 ++ Array(InnP(jCtr)))
           }
         }
 
 
         if (iCtr > 1) {
-          val dist1 = F1(i-2 - 1)(jCtr)(1)._1 + OutP(iCtr - 1).distanceTo(OutP(iCtr))
-          val dist2 = F1(i-2 - 1)(jCtr)(0)._1 + InnP(jCtr).distanceTo(OutP(iCtr))
-          F1(i-2)(jCtr)(1) = if (dist1 < dist2) {
-            (dist1, F1(i-2 - 1)(jCtr)(1)._2 ++ Array(OutP(iCtr)))
+          val dist1 = F1(i-1 - 1)(jCtr)(1)._1 + OutP(iCtr - 1).distanceTo(OutP(iCtr))
+          val dist2 = F1(i-1 - 1)(jCtr)(0)._1 + InnP(jCtr).distanceTo(OutP(iCtr))
+          F1(i-1)(jCtr)(1) = if (dist1 < dist2) {
+            (dist1, F1(i-1 - 1)(jCtr)(1)._2 ++ Array(OutP(iCtr)))
           } else {
-            (dist2, F1(i-2 - 1)(jCtr)(0)._2 ++ Array(OutP(iCtr)))
+            (dist2, F1(i-1 - 1)(jCtr)(0)._2 ++ Array(OutP(iCtr)))
           }
         }
       }
-      F1(i-2 -1) = F1(i-2)
+      //copy values
+      for (tempjCtr <- 0 until j) {
+        for (tempmCtr <- 0 until m) {
+          F1(i-1 -1)(tempjCtr)(tempmCtr) = F1(i-1)(tempjCtr)(tempmCtr)
+        }
+      }
+
+      println()
     }
 
-    val dist1 = F1(i-2)(k)(1)._1 + OutP(n - k).distanceTo(OutP(1))
-    val dist2 = F1(i-2)(k)(0)._1 + InnP(k).distanceTo(OutP(1))
+    val dist1 = F1(i-1)(k)(1)._1 + OutP(n - k).distanceTo(OutP(1))
+    val dist2 = F1(i-1)(k)(0)._1 + InnP(k).distanceTo(OutP(1))
     val shortestTour = if (dist1 < dist2) {
-      (dist1, F1(i-2)(k)(1)._2 ++ Array(OutP(1)))
+      (dist1, F1(i-1)(k)(1)._2 ++ Array(OutP(1)))
     } else {
-      (dist2, F1(i-2)(k)(0)._2 ++ Array(OutP(1)))
+      (dist2, F1(i-1)(k)(0)._2 ++ Array(OutP(1)))
     }
 
     shortestTour

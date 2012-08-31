@@ -13,7 +13,7 @@ import si.zitnik.dr.mmr.domain.Point
  * To change this template use File | Settings | File Templates.
  */
 class GraphPanel(val points: Array[Point]) extends JPanel {
-  val padding = 15
+  val padding = 45
   val pointSize = 7
 
   val xMin = points.minBy(_.x).x
@@ -30,10 +30,10 @@ class GraphPanel(val points: Array[Point]) extends JPanel {
     val yUnit = height*1./(yMax-yMin)
 
     //interpolate x
-    val x = (point.x-xMin)*xUnit + padding
+    val x = (point.x-xMin)*xUnit + padding/2
 
     //interpolate y
-    val y = (point.y-yMin)*yUnit + padding
+    val y = this.getHeight() - (point.y-yMin)*yUnit - padding
 
     (x.round.toInt ,y.round.toInt)
   }
@@ -52,8 +52,9 @@ class GraphPanel(val points: Array[Point]) extends JPanel {
 
     //draw points
     g.setColor(Color.RED)
-    for (point <- interpolatedPoints) {
+    for ((point, realPoint) <- interpolatedPoints.zip(points)) {
       g.fillOval(point._1-pointSize/2, point._2-pointSize/2, pointSize, pointSize)
+      g.drawString(realPoint.toString, point._1-15, point._2+20)
     }
 
   }

@@ -37,10 +37,10 @@ class Algorithm1Test {
     var chInput = Array[Point]((1,1), (2,1), (2,2), (1,2))
     input ++= chInput
     input += ((1.5, 1.5))
-    /*input += ((1.1, 1.1))
+    input += ((1.1, 1.1))
     input += ((1.2, 1.2))
     input += ((1.3, 1.3))
-    input += ((1.4, 1.4))*/
+    input += ((1.4, 1.4))
 
     val shortestTour = new Algorithm1(input).compute()
     println("Length: %.3f\nPath: %s".format(shortestTour._1, shortestTour._2.mkString(" -> ")))
@@ -53,10 +53,10 @@ class Algorithm1Test {
     var chInput = Array[Point]((1,1), (2,1), (2,2), (1,2))
     input ++= chInput
     input += ((1.5, 1.5))
-    /*input += ((1.1, 1.1))
+    input += ((1.1, 1.1))
     input += ((1.2, 1.2))
     input += ((1.3, 1.3))
-    input += ((1.4, 1.4))*/
+    input += ((1.4, 1.4))
 
     val shortestTour = new Algorithm1SpaceOptimized(input).compute()
     println("Length: %.3f\nPath: %s".format(shortestTour._1, shortestTour._2.mkString(" -> ")))

@@ -16,10 +16,10 @@ import si.zitnik.dr.mmr.algorithms.Algorithm1SpaceOptimized
  */
 class GraphFrame extends JFrame {
 
-  def this(hamiltonianCycle: Array[Point]) = {
+  def this(hamiltonianCycle: Array[Point], title: String = "") = {
     this()
 
-    this.setTitle("Hamiltonian Cycle Visualizer")
+    this.setTitle("Hamiltonian Cycle Visualizer" + " - " + title)
     this.setSize(600,600)
 
     val content = this.getContentPane()
