@@ -18,15 +18,24 @@ import si.zitnik.dr.mmr.ui.GraphFrame
  * To change this template use File | Settings | File Templates.
  */
 object HamiltonianApp {
+
+  def main(args: Array[String]) {
+    if (args.length > 0 && args.map(_.toLowerCase()).contains("cmd")) { //command-based
+      CMDRunner.processArguments(args)
+    } else { //interactive
+      InteractiveRunner.printMainMenu()
+    }
+  }
+
+
+}
+
+object InteractiveRunner {
   var end = false
   val sc = new Scanner(Source.stdin.reader())
 
   var points: ArrayBuffer[Point] = null
   var algorithm: Algorithm = null
-
-  def main(args: Array[String]) {
-    printMainMenu()
-  }
 
   def printMainMenu() {
     try {
@@ -121,9 +130,98 @@ object HamiltonianApp {
 
     print("\n\nDo you want to visualize the result? [yes]: ")
     if (!sc.nextLine().toLowerCase.contains("no")) {
-      new GraphFrame(result._2)
+      print("\n\nDo you want to draw point coordinates? [yes]: ")
+      if (!sc.nextLine().toLowerCase.contains("no")) {
+        new GraphFrame(result._2)
+      } else {
+        new GraphFrame(result._2, false)
+      }
     }
 
     printMainMenu()
   }
 }
+
+object CMDRunner {
+  val sc = new Scanner(Source.stdin.reader())
+
+  def processArguments(args: Array[String]) {
+    val config = new Config()
+    val str = "cmd"
+    var h = false
+    val parser = new scopt.mutable.OptionParser("HamiltonianApp", "0.1") {
+      arg("cmd", "Command line type of execution. If not set, interactive shell is started.", { v: String =>  str })
+      argOpt("help", "Prints help.", { v: String =>  h = true })
+
+      opt("p", "points", "[FILE, STDIN, RANDOM]", "STDIN end line = EOP, Default: RANDOM", { v: String => config.points = v })
+
+      opt("f", "file", "<file>", "File if FILE point selected. Default: null", { v: String => config.filename = v })
+      intOpt("n", "N", "Number of convex hull points if RANDOM selected. Default: 10", { v: Int => config.n = v })
+      intOpt("k", "K", "Number of inner points if RANDOM selected. Default: 3", { v: Int => config.k = v })
+
+      intOpt("a", "alg", "[1,2,3]", "1- Algorithm1, 2- Space Optimized Algorithm1, 3-Algorithm2, Default: 1", { v: Int => config.alg = v })
+
+      booleanOpt("v", "vis", "Visualize result, Default: true", { v: Boolean => config.visualize = v })
+      booleanOpt("c", "coords", "Show coordinates, Default: false", { v: Boolean => config.coords = v })
+    }
+    if (parser.parse(args) && !h) {
+      // do stuff
+
+      //get points
+      var points = new ArrayBuffer[Point]()
+      config.points match {
+        case "FILE" => {
+          if (config.filename == null) {println("ERROR: filename not set!")}
+          Source.fromFile(config.filename).getLines().foreach(line => {
+            val splitLine = line.split(" ")
+            points.append((splitLine(0).toDouble, splitLine(1).toDouble))
+          })
+        }
+        case "STDIN" => {
+          var pointsEnd = false
+          while (!pointsEnd) {
+            val line = sc.nextLine()
+            line match {
+              case "EOP" => pointsEnd = true
+              case _ => {
+                val splitLine = line.split(" ")
+                points.append((splitLine(0).toDouble, splitLine(1).toDouble))
+              }
+            }
+          }
+        }
+        case "RANDOM" => { points = RandomGraph.create(config.n,config.k) }
+        case _ => println("ERROR: Unsupported points input type!")
+      }
+
+      //algorithm selection
+      var algorithm: Algorithm = null
+      config.alg match {
+        case 1 => algorithm = new Algorithm1(points)
+        case 2 => algorithm = new Algorithm1SpaceOptimized(points)
+        case 3 => algorithm = new Algorithm2(points)
+        case _ => println("ERROR: Unsupported algorithm type!")
+      }
+
+      println("Running selected algorithm ...")
+      val result = algorithm.compute()
+      println("Calculation finished!")
+      println("\n\nCycle length: %.2f".format(result._1))
+      println("Points chain: %s".format(result._2.mkString("("," -> ", ")")))
+
+      //results visualization
+      if (config.visualize) {
+        new GraphFrame(result._2, config.coords)
+      }
+    }
+    else {
+      // arguments are bad, usage message will have been displayed
+      parser.showUsage
+    }
+  }
+
+}
+
+case class Config(var points: String = "RANDOM", var filename: String = null,
+                  var n: Int = 10, var k: Int = 3, var alg: Int = 1,
+                  var visualize: Boolean = true, var coords: Boolean = false)

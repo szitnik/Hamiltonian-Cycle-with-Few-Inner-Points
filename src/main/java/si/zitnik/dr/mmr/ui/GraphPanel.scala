@@ -12,7 +12,7 @@ import si.zitnik.dr.mmr.domain.Point
  * Time: 5:27 PM
  * To change this template use File | Settings | File Templates.
  */
-class GraphPanel(val points: Array[Point]) extends JPanel {
+class GraphPanel(val points: Array[Point], showCoords: Boolean) extends JPanel {
   this.setBackground(Color.WHITE)
   val padding = 45
   val pointSize = 7
@@ -55,8 +55,13 @@ class GraphPanel(val points: Array[Point]) extends JPanel {
     g.setColor(Color.RED)
     for ((point, realPoint) <- interpolatedPoints.zip(points)) {
       g.fillOval(point._1-pointSize/2, point._2-pointSize/2, pointSize, pointSize)
-      g.drawString(realPoint.toString, point._1-15, point._2+20)
     }
 
+    if (showCoords) {
+      g.setColor(Color.RED)
+      for ((point, realPoint) <- interpolatedPoints.zip(points)) {
+        g.drawString(realPoint.toString, point._1-15, point._2+20)
+      }
+    }
   }
 }

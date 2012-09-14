@@ -16,7 +16,7 @@ import si.zitnik.dr.mmr.algorithms.Algorithm1SpaceOptimized
  */
 class GraphFrame extends JFrame {
 
-  def this(hamiltonianCycle: Array[Point], title: String = "") = {
+  def this(hamiltonianCycle: Array[Point], showCoords: Boolean = true, title: String = "") = {
     this()
 
     this.setTitle("Hamiltonian Cycle Visualizer" + " - " + title)
@@ -26,7 +26,7 @@ class GraphFrame extends JFrame {
     content.setLayout(new BorderLayout())
     content.setBackground(Color.WHITE)
 
-    val panel = new GraphPanel(hamiltonianCycle)
+    val panel = new GraphPanel(hamiltonianCycle, showCoords)
     content.add(panel, BorderLayout.CENTER)
 
     this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)

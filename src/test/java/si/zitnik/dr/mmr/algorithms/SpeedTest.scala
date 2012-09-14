@@ -43,8 +43,8 @@ class SpeedTest {
 
         if (result2._1 < result1._1) {
           secondBetter += 1
-          new GraphFrame(result1._2, "First")
-          new GraphFrame(result2._2, "Second")
+          new GraphFrame(result1._2, true, "First")
+          new GraphFrame(result2._2, true, "Second")
           return
         } else if (result2._1 > result1._1) {
           firstBetter += 1
