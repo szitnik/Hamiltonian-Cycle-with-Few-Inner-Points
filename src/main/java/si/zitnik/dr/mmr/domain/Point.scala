@@ -1,5 +1,7 @@
 package si.zitnik.dr.mmr.domain
 
+import si.zitnik.dr.mmr.util.MMRConversions._
+
 
 
 class Point(val x: Double,
@@ -8,7 +10,8 @@ class Point(val x: Double,
   def distanceTo(p: Point) = math.sqrt(math.pow(this.x-p.x, 2)+math.pow(this.y-p.y, 2))
 
   override def equals(p: Any) = {
-    p.isInstanceOf[Point] && this.x == p.asInstanceOf[Point].x && this.y == p.asInstanceOf[Point].y
+    (p.isInstanceOf[Point] && this.x == p.asInstanceOf[Point].x && this.y == p.asInstanceOf[Point].y) ||
+    (p.isInstanceOf[Tuple2[Double, Double]] && this.equals(new Point(p.asInstanceOf[Tuple2[Double, Double]]._1, p.asInstanceOf[Tuple2[Double, Double]]._2)))
   }
 
   override

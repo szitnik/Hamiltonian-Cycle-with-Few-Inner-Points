@@ -9,6 +9,7 @@ import si.zitnik.dr.mmr.util.RandomGraph
 import si.zitnik.dr.mmr.algorithms.abst.Algorithm
 import si.zitnik.dr.mmr.algorithms.{Algorithm2, Algorithm1SpaceOptimized, Algorithm1}
 import si.zitnik.dr.mmr.ui.GraphFrame
+import java.io.{FileWriter, File}
 
 /**
  * Created with IntelliJ IDEA.
@@ -145,6 +146,12 @@ object InteractiveRunner {
 object CMDRunner {
   val sc = new Scanner(Source.stdin.reader())
 
+  def savePoints(filename: String, points: ArrayBuffer[Point]) {
+    val fw = new FileWriter(filename)
+    points.foreach(p => {fw.write("%.2f %.2f\n".format(p.x, p.y))})
+    fw.close()
+  }
+
   def processArguments(args: Array[String]) {
     val config = new Config()
     val str = "cmd"
@@ -163,6 +170,8 @@ object CMDRunner {
 
       booleanOpt("v", "vis", "Visualize result, Default: true", { v: Boolean => config.visualize = v })
       booleanOpt("c", "coords", "Show coordinates, Default: false", { v: Boolean => config.coords = v })
+      opt("s", "save", "<file>", "Save graph to a file.", { v: String => config.saveFile = v })
+
     }
     if (parser.parse(args) && !h) {
       // do stuff
@@ -192,6 +201,10 @@ object CMDRunner {
         }
         case "RANDOM" => { points = RandomGraph.create(config.n,config.k) }
         case _ => println("ERROR: Unsupported points input type!")
+      }
+
+      if (config.saveFile != null) {
+        savePoints(config.saveFile, points)
       }
 
       //algorithm selection
@@ -224,4 +237,5 @@ object CMDRunner {
 
 case class Config(var points: String = "RANDOM", var filename: String = null,
                   var n: Int = 10, var k: Int = 3, var alg: Int = 1,
-                  var visualize: Boolean = true, var coords: Boolean = false)
+                  var visualize: Boolean = true, var coords: Boolean = false,
+                  var saveFile: String = null)
