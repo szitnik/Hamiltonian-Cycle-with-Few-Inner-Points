@@ -53,11 +53,11 @@ class Algorithm2(points: ArrayBuffer[Point]) extends Algorithm(points) {
           val lastPoint = InnP(mCtr)
           if (S.contains(lastPoint)) {
             var retPath: (Double, Array[Point]) = null
-            val buffer = S.toBuffer.permutations
+            val buffer = S.filter(_ != lastPoint).toBuffer.permutations
             while (buffer.hasNext) {
               val Sperm = buffer.next()
               var currentPath: (Double, Array[Point]) = (0., Array(OutP(1)))
-              Sperm.filter(_ != lastPoint).foreach(point => {
+              Sperm.foreach(point => {
                 currentPath = (currentPath._1 + currentPath._2.last.distanceTo(point), currentPath._2 ++ Array(point))
               })
               currentPath = (currentPath._1 + currentPath._2.last.distanceTo(lastPoint), currentPath._2 ++ Array(lastPoint))

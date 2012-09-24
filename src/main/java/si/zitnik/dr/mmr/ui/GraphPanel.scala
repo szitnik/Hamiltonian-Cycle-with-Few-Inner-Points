@@ -29,12 +29,13 @@ class GraphPanel(val points: Array[Point], showCoords: Boolean) extends JPanel {
 
     val xUnit = width*1./(xMax-xMin)
     val yUnit = height*1./(yMax-yMin)
+    val unit = math.min(xUnit, yUnit)
 
     //interpolate x
-    val x = (point.x-xMin)*xUnit + padding/2
+    val x = (point.x-xMin)*unit + padding/2
 
     //interpolate y
-    val y = this.getHeight() - (point.y-yMin)*yUnit - padding
+    val y = this.getHeight() - (point.y-yMin)*unit - padding
 
     (x.round.toInt ,y.round.toInt)
   }

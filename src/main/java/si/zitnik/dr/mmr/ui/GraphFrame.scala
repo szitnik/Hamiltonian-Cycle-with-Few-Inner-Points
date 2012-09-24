@@ -29,7 +29,7 @@ class GraphFrame extends JFrame {
     val panel = new GraphPanel(hamiltonianCycle, showCoords)
     content.add(panel, BorderLayout.CENTER)
 
-    this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
+    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     this.setVisible(true)
 
     this

@@ -85,7 +85,6 @@ class Algorithm1SpaceOptimized(points: ArrayBuffer[Point]) extends Algorithm(poi
         }
       }
 
-      println()
     }
 
     val dist1 = F1(i-1)(k)(1)._1 + OutP(n - k).distanceTo(OutP(1))

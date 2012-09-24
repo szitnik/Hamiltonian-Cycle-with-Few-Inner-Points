@@ -8,7 +8,7 @@ import si.zitnik.dr.mmr.util.MMRConversions._
 import si.zitnik.dr.mmr.util.RandomGraph
 import si.zitnik.dr.mmr.algorithms.abst.Algorithm
 import si.zitnik.dr.mmr.algorithms.{Algorithm2, Algorithm1SpaceOptimized, Algorithm1}
-import si.zitnik.dr.mmr.ui.GraphFrame
+import si.zitnik.dr.mmr.ui.{GraphFrame}
 import java.io.{FileWriter, File}
 
 /**
@@ -225,7 +225,16 @@ object CMDRunner {
       //results visualization
       if (config.visualize) {
         new GraphFrame(result._2, config.coords)
+
+        println("Press ENTER to exit ...")
+        while (sc.hasNextLine()) {
+          val line = sc.nextLine()
+          if (line.equals("")) {
+            System.exit(0)
+          }
+        }
       }
+
     }
     else {
       // arguments are bad, usage message will have been displayed

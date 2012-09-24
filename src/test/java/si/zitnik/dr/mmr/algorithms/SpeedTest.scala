@@ -4,7 +4,7 @@ import org.junit.Test
 import si.zitnik.dr.mmr.util.RandomGraph
 import collection.mutable.ArrayBuffer
 import si.zitnik.dr.mmr.domain.Point
-import si.zitnik.dr.mmr.ui.GraphFrame
+import si.zitnik.dr.mmr.ui.{GraphFrame}
 
 /**
  * Created with IntelliJ IDEA.
